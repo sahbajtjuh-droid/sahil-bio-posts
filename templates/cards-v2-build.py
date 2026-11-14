@@ -16,7 +16,7 @@ def capsule(x,y,kind):
     if kind=='p1':   fill,stroke,op,extra='none','#9AA59F',0.9,''
     elif kind=='p2': fill,stroke,op,extra='none',AZ,1,f'<line x1="{x+8}" y1="{y+h-4}" x2="{x+w-8}" y2="{y+4}" stroke="{AZ}" stroke-width="2.2"/>'
     elif kind=='p3': fill,stroke,op,extra='none',INK,1,f'<line x1="{x+8}" y1="{y+h-4}" x2="{x+w-8}" y2="{y+4}" stroke="{INK}" stroke-width="2"/>'
-    elif kind=='fi': fill,stroke,op,extra='none',INK,1,f'<line x1="{x+8}" y1="{y+h-4}" x2="{x+w-8}" y2="{y+4}" stroke="{INK}" stroke-width="2"/>'
+    elif kind=='fi': fill,stroke,op,extra=INK,INK,1,f'<line x1="{x+8}" y1="{y+h-4}" x2="{x+w-8}" y2="{y+4}" stroke="#fff" stroke-width="2"/>'
     else:            fill,stroke,op,extra=AZ,AZ,1,f'<line x1="{x+w/2}" y1="{y+3}" x2="{x+w/2}" y2="{y+h-3}" stroke="#fff" stroke-width="2"/>'
     dash=' stroke-dasharray="3 3"' if kind=='p1' else ''
     return f'<g opacity="{op}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}" stroke="{stroke}" stroke-width="2"{dash}/>{extra}</g>'
@@ -29,21 +29,23 @@ for i,k in enumerate(kinds):
     x,y=gx+c*dx,gy+r*dy
     cells+=capsule(x,y,k); pos.setdefault(k,[]).append((x,y))
 # brackets on right of grid
-def note(y,label,count,color,bold=False):
-    fw='600' if bold else '500'
-    return f'''<div style="position:absolute;left:0;top:{y}px;display:flex;align-items:baseline;gap:14px"><span style="font-family:'Newsreader',serif;font-size:{56 if bold else 40}px;line-height:1;color:{color}">{count}</span><span style="font-size:{24 if bold else 21}px;line-height:1.25;font-weight:{fw};color:{color};max-width:260px">{label}</span></div>'''
+def icon(kind):
+    return f'<svg width="56" height="28" viewBox="-2 -2 56 28" aria-hidden="true">{capsule(0,0,kind)}</svg>'
+def note(label,count,color,kind,bold=False):
+    return f'''<div style="display:grid;grid-template-columns:60px 70px minmax(0,1fr);align-items:center;gap:6px">{icon(kind)}<span style="font-family:'Newsreader',serif;font-size:48px;line-height:1;color:{color}">{count}</span><span style="font-size:22px;line-height:1.25;font-weight:{600 if bold else 500};color:{color}">{label}</span></div>'''
 gridsvg=f'<svg width="630" height="452" viewBox="0 -2 630 452" aria-hidden="true">{cells}</svg>'
-legend=(note(0,'stop after Phase 1',48,MUT)+note(92,'stop in Phase 2.<br>The biggest loss.',37,AZD,True)+note(216,'stop in Phase 3',6,INK)+note(286,'stopped at filing',1,INK)+note(356,'approved',8,AZ,True))
+legend=(note('stop after Phase 1',48,MUT,'p1')+note('stop in Phase 2, the biggest loss',37,AZD,'p2',True)+note('stop in Phase 3',6,INK,'p3')+note('stopped at filing',1,INK,'fi')+note('approved',8,AZ,'ap',True))
 # mock press release with annotations
 pr_lines=''.join(f'<div style="height:10px;border-radius:5px;background:rgba(17,28,22,0.13);width:{w}%;margin-top:12px"></div>' for w in [100,94,98,70])
 pins=[("01","Primary endpoint, set before the trial?"),("02","Randomised and blinded?"),("03","Patient outcome, or a biomarker?"),("04","Whole trial, or a subgroup found later?"),("05","Better than today's treatment?")]
 pinh=''.join(f'''<div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-top:1px solid rgba(17,28,22,0.15)"><span style="flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:{AZ};color:#fff;font-family:'IBM Plex Mono';font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center">{n}</span><span style="font-size:22px;line-height:1.25">{t}</span></div>''' for n,t in pins)
 trial=f'''<div id="card" style="position:relative;width:1200px;height:1500px;background:{PAPER};color:{INK};overflow:hidden;padding:96px 104px 0">{NOISE}
 {topbar('TRIAL ODDS','FOR INVESTORS · THE SCIENCE SIDE','#1A66CC',INK,'rgba(17,28,22,0.2)')}
-<div style="margin-top:44px;font-family:'Newsreader',serif;font-size:84px;line-height:0.98;letter-spacing:-0.02em">100 drugs enter trials.<br><span style="font-style:italic;color:{AZ}">8 come out.</span></div>
-<div style="position:relative;margin-top:48px;display:flex;gap:44px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;justify-content:space-between;height:1170px;padding-top:44px">
+<div style="font-family:'Newsreader',serif;font-size:84px;line-height:0.98;letter-spacing:-0.02em">100 drugs enter trials.<br><span style="font-style:italic;color:{AZ}">8 come out.</span></div>
+<div style="position:relative;margin-top:48px;display:flex;gap:30px;align-items:flex-start">
   <div>{gridsvg}<div style="margin-top:10px;font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{MUT}">EACH CAPSULE IS ONE DRUG IN CLINICAL TRIALS</div></div>
-  <div style="position:relative;flex:1;height:452px">{legend}</div>
+  <div style="position:relative;flex:1;height:452px;display:flex;flex-direction:column;justify-content:space-between;padding:0 0 4px">{legend}</div>
 </div>
 <div style="position:relative;margin-top:84px;display:grid;grid-template-columns:430px minmax(0,1fr);gap:40px;align-items:start">
   <div style="background:#fff;border-radius:6px;padding:26px 28px 30px;box-shadow:0 18px 40px rgba(17,28,22,0.14),0 2px 6px rgba(17,28,22,0.08);transform:rotate(-2deg);margin-top:8px">
@@ -52,6 +54,7 @@ trial=f'''<div id="card" style="position:relative;width:1200px;height:1500px;bac
     {pr_lines}
   </div>
   <div><div style="font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.14em;color:{MUT};margin-bottom:6px">5 QUESTIONS BEFORE YOU BELIEVE "POSITIVE"</div>{pinh}</div>
+</div>
 </div>
 {footer('SOURCE: BIO, INFORMA, QLS 2021 · NOT INVESTMENT ADVICE',INK,MUT,'rgba(17,28,22,0.18)')}
 </div>'''
@@ -85,15 +88,16 @@ def gauge(pct,label,color,strong):
 </svg><div style="margin-top:-6px;text-align:center;font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{color if strong else MUT};font-weight:{600 if strong else 400}">{label}</div>'''
 bio=f'''<div id="card" style="position:relative;width:1200px;height:1500px;background:{PAPER};color:{INK};overflow:hidden;padding:96px 104px 0">{NOISE}
 {topbar('BY THE NUMBERS','FOR INVESTORS · THE SCIENCE SIDE','#1A66CC',INK,'rgba(17,28,22,0.2)')}
-<div style="margin-top:44px;font-family:'Newsreader',serif;font-size:80px;line-height:1.0;letter-spacing:-0.02em">Pick the right patients.<br><span style="font-style:italic;color:{AZ}">Double the odds.</span></div>
+<div style="display:flex;flex-direction:column;justify-content:space-between;height:1170px;padding-top:44px">
+<div style="font-family:'Newsreader',serif;font-size:80px;line-height:1.0;letter-spacing:-0.02em">Pick the right patients.<br><span style="font-style:italic;color:{AZ}">Double the odds.</span></div>
 <div style="margin-top:22px;font-size:26px;line-height:1.4;color:#38453E;max-width:930px">Drug programmes that used a biomarker to choose patients reached approval twice as often.</div>
 <div style="position:relative;margin-top:50px;display:grid;grid-template-columns:380px 1fr;gap:40px;align-items:center">
   <div><div style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{MUT};margin-bottom:10px">EVERYONE WITH THE DISEASE</div>{crowdsvg}</div>
   <div style="position:relative;height:270px">
     <svg width="100%" height="270" viewBox="0 0 512 270" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0"><path d="M0,10 L250,95 L250,175 L0,260 Z" fill="rgba(28,116,224,0.10)" stroke="{AZ}" stroke-width="2"/><rect x="250" y="95" width="262" height="80" fill="rgba(28,116,224,0.10)"/></svg>
     <div style="position:absolute;left:44px;top:118px;font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.14em;font-weight:600;color:{AZD}">BIOMARKER TEST</div>
-    <div style="position:absolute;left:262px;top:104px">{selsvg.replace('width="430"','width="240"').replace('viewBox="0 0 430 70"','viewBox="0 0 430 70"')}</div>
-    <div style="position:absolute;left:262px;top:186px;font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{AZD}">ONLY PATIENTS WITH<br>THE MARKER ENROL</div>
+    <div style="position:absolute;left:300px;top:104px">{selsvg.replace('width="430"','width="240"').replace('viewBox="0 0 430 70"','viewBox="0 0 430 70"')}</div>
+    <div style="position:absolute;left:300px;top:186px;font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{AZD}">ONLY PATIENTS WITH<br>THE MARKER ENROL</div>
   </div>
 </div>
 <div style="position:relative;margin-top:44px;padding-top:20px;border-top:1px solid rgba(17,28,22,0.18);font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.14em;color:{MUT}">CHANCE OF APPROVAL FROM PHASE 1</div>
@@ -101,12 +105,13 @@ bio=f'''<div id="card" style="position:relative;width:1200px;height:1500px;backg
   <div>{gauge(7.9,'ALL DRUGS',INK,False)}</div>
   <div>{gauge(15.9,'WITH A SELECTION BIOMARKER',AZ,True)}</div>
 </div>
-<div style="position:relative;margin-top:40px;display:flex;align-items:center;gap:22px;background:#fff;border-radius:6px;padding:22px 28px;box-shadow:0 10px 30px rgba(17,28,22,0.10)"><span style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.14em;font-weight:600;color:#fff;background:{AZ};padding:6px 10px;border-radius:3px;white-space:nowrap">ASK THE FOUNDER</span><span style="font-family:'Newsreader',serif;font-style:italic;font-size:36px;line-height:1.1">How do you pick your patients?</span></div>
+<div style="position:relative;margin-top:40px;display:flex;align-items:center;gap:22px;background:#fff;border-radius:6px;padding:22px 28px;box-shadow:0 14px 34px rgba(17,28,22,0.13);transform:rotate(-1.2deg)"><span style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.14em;font-weight:600;color:#fff;background:{AZ};padding:6px 10px;border-radius:3px;white-space:nowrap">ASK THE FOUNDER</span><span style="font-family:'Newsreader',serif;font-style:italic;font-size:36px;line-height:1.1">How do you pick your patients?</span></div>
+</div>
 {footer('SOURCE: BIO, INFORMA, QLS 2021 · NOT INVESTMENT ADVICE',INK,MUT,'rgba(17,28,22,0.18)')}
 </div>'''
 
-# ================= 3. PATENT CLOCK: dial =================
-CX,CY,R=330,330,250; TOT=25.0
+# ================= 3. PATENT CLOCK: stopwatch =================
+CX,CY,R=330,360,240; TOT=25.0
 def ang(y): return -math.pi/2 + 2*math.pi*y/TOT
 def P(y,r): a=ang(y); return CX+r*math.cos(a), CY+r*math.sin(a)
 def arc(y0,y1,r):
@@ -114,40 +119,62 @@ def arc(y0,y1,r):
     return f'M{x0:.1f},{yy0:.1f} A{r},{r} 0 {large} 1 {x1:.1f},{yy1:.1f}'
 ticks=''
 for y in range(0,26):
-    r1=R+30; r2=R+(46 if y%5==0 else 38)
+    r1=R+34; r2=R+(50 if y%5==0 else 42)
     x1,y1=P(y,r1); x2,y2=P(y,r2)
     ticks+=f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{INK2}" stroke-width="{2.5 if y%5==0 else 1.2}" opacity="{0.8 if y%5==0 else 0.4}"/>'
 lab=''
-for y in [0,5,10,15,20]:
-    x,yy=P(y,R+74); lab+=f'<text x="{x:.1f}" y="{yy+8:.1f}" font-family="IBM Plex Mono" font-size="20" font-weight="600" fill="{INK2}" text-anchor="middle">{y}</text>'
+for y in [5,10,15,20]:
+    x,yy=P(y,R+98); lab+=f'<text x="{x:.1f}" y="{yy+7:.1f}" font-family="IBM Plex Mono" font-size="20" font-weight="600" fill="{INK2}" text-anchor="middle">{y}</text>'
+fx1,fy1=P(10.5,R-34); fx2,fy2=P(10.5,R+34)
 sx,sy=P(22.5,R)
-spc_label=f'<text x="{sx-6:.1f}" y="{sy+7:.1f}" font-family="IBM Plex Mono" font-size="19" font-weight="600" fill="#B23A17" text-anchor="middle">SPC</text>'
-dial=f'''<svg width="660" height="660" viewBox="-40 -40 740 740" aria-hidden="true">
+apx,apy=P(10.5,R-78)
+def btn(yr):
+    x,y=P(yr,R+70); a=math.degrees(ang(yr))+90
+    return f'<rect x="{x-16:.1f}" y="{y-14:.1f}" width="32" height="28" rx="5" fill="{INK2}" transform="rotate({a:.1f} {x:.1f} {y:.1f})"/>'
+dial=f"""<svg width="680" height="746" viewBox="-40 -40 740 812" aria-hidden="true">
 <defs><pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="{INK2}" stroke-width="2.4" opacity="0.45"/></pattern></defs>
-<circle cx="{CX}" cy="{CY}" r="{R+30}" fill="#fff" opacity="0.55"/>
-<path d="{arc(0,11,R)}" fill="none" stroke="url(#hatch)" stroke-width="56"/>
-<path d="{arc(0,11,R)}" fill="none" stroke="{INK2}" stroke-width="1" opacity="0.3"/>
-<path d="{arc(11,20,R)}" fill="none" stroke="{OR}" stroke-width="56"/>
-<path d="{arc(20,25,R)}" fill="none" stroke="{OR}" stroke-width="56" opacity="0.28"/>
-<path d="{arc(20,25,R)}" fill="none" stroke="{OR}" stroke-width="2" stroke-dasharray="6 6" transform="translate(0,0)"/>
+<rect x="{CX-14}" y="{CY-R-96}" width="28" height="34" fill="{INK2}"/>
+<rect x="{CX-42}" y="{CY-R-122}" width="84" height="32" rx="8" fill="{INK2}"/>
+{btn(-2.6)}{btn(2.6)}
+<circle cx="{CX}" cy="{CY}" r="{R+62}" fill="none" stroke="{INK2}" stroke-width="7"/>
+<circle cx="{CX}" cy="{CY}" r="{R+58}" fill="#fff" opacity="0.55"/>
+<path d="{arc(0,10.5,R)}" fill="none" stroke="url(#hatch)" stroke-width="60"/>
+<path d="{arc(10.5,20,R)}" fill="none" stroke="{OR}" stroke-width="60"/>
+<path d="{arc(20,25,R)}" fill="none" stroke="{OR}" stroke-width="60" opacity="0.25"/>
 {ticks}{lab}
-{spc_label}
-</svg>'''
-def callout(top,left,title,body,color,w=300):
-    return f'''<div style="position:absolute;top:{top}px;left:{left}px;width:{w}px"><div style="height:3px;width:44px;background:{color};margin-bottom:12px"></div><div style="font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.12em;font-weight:600;color:{color}">{title}</div><div style="margin-top:6px;font-size:22px;line-height:1.3;color:#3a3630">{body}</div></div>'''
-patent=f'''<div id="card" style="position:relative;width:1200px;height:1500px;background:{WARM};color:{INK2};overflow:hidden;padding:96px 104px 0">{NOISE}
+<line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="{INK2}" stroke-width="4"/>
+<text x="{sx:.1f}" y="{sy+7:.1f}" font-family="IBM Plex Mono" font-size="19" font-weight="600" fill="#B23A17" text-anchor="middle">SPC</text>
+<text x="{apx:.1f}" y="{apy+6:.1f}" font-family="IBM Plex Mono" font-size="15" font-weight="600" letter-spacing="1.5" fill="{INK2}" text-anchor="middle">APPROVAL</text>
+<text x="{CX}" y="{CY-100}" font-family="IBM Plex Mono" font-size="16" letter-spacing="2" fill="{MUT2}" text-anchor="middle">ROUGHLY</text>
+<text x="{CX}" y="{CY+40}" font-family="Newsreader" font-size="170" fill="{OR}" text-anchor="middle">9</text>
+<text x="{CX}" y="{CY+86}" font-family="IBM Plex Mono" font-size="18" letter-spacing="2.5" fill="{MUT2}" text-anchor="middle">YEARS LEFT TO SELL</text>
+</svg>"""
+def callout(title,body,color):
+    return ('<div><div style="height:3px;width:44px;background:'+color+';margin-bottom:12px"></div>'
+            '<div style="font-family:\'IBM Plex Mono\';font-size:16px;letter-spacing:0.12em;font-weight:600;color:'+color+'">'+title+'</div>'
+            '<div style="margin-top:6px;font-size:22px;line-height:1.32;color:#3a3630">'+body+'</div></div>')
+c1=callout('YEAR 0 · YOU FILE','The clock starts. Lab work, trials and approval all run on it.',INK2)
+c2=callout('ABOUT 10 YEARS · NO SALES','First human trial to approval took 10.5 years on average, 2011 to 2020.',INK2)
+c3=callout('YEAR 20 · PATENT ENDS','Whatever is left after approval is your selling window.',ORD)
+patent=f"""<div id="card" style="position:relative;width:1200px;height:1500px;background:{WARM};color:{INK2};overflow:hidden;padding:96px 104px 0">{NOISE}
 {topbar('THE TAKE','FOR SCIENTISTS · THE BUSINESS SIDE','#C93D1A',INK2,'rgba(26,22,19,0.2)')}
-<div style="margin-top:44px;font-family:'Newsreader',serif;font-size:60px;line-height:1.04;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">Your first sale comes a decade later.</span></div>
-<div style="position:relative;margin-top:30px;height:700px">
-  <div style="position:absolute;left:-30px;top:10px">{dial}</div>
-  {callout(30,700,'YEAR 0 · YOU FILE','The clock starts. Lab work, trials and approval all run on it.',INK2)}
-  {callout(250,700,'ABOUT 10 YEARS · NO SALES','First human trial to approval took 10.5 years on average, 2011 to 2020.',INK2)}
-  {callout(470,700,'YEAR 20 · PATENT ENDS','What is left after approval is your selling window.',ORD)}
-  <div style="position:absolute;left:170px;top:268px;width:260px;text-align:center"><div style="font-family:'Newsreader',serif;font-size:96px;line-height:1;color:{OR}">~9</div><div style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{MUT2};margin-top:6px">YEARS LEFT TO SELL</div></div>
+<div style="display:flex;flex-direction:column;justify-content:space-between;height:1170px;padding-top:44px">
+<div style="font-family:'Newsreader',serif;font-size:60px;line-height:1.04;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">Your first sale comes a decade later.</span></div>
+<div style="position:relative;margin-top:22px;display:grid;grid-template-columns:640px minmax(0,1fr);gap:20px;align-items:center">
+  <div style="margin-left:-36px">{dial}</div>
+  <div style="display:flex;flex-direction:column;gap:46px">{c1}{c2}{c3}</div>
 </div>
-<div style="position:relative;margin-top:10px;display:flex;align-items:center;gap:22px;border:2px dashed {OR};border-radius:6px;padding:20px 26px"><span style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.14em;font-weight:600;color:#fff;background:#C93D1A;padding:6px 10px;border-radius:3px;white-space:nowrap">EUROPE'S FIX</span><span style="font-size:24px;line-height:1.3">A supplementary protection certificate adds up to 5 years, capped at 15 years after approval.</span></div>
+<div style="position:relative;margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:36px;align-items:center">
+  <div style="border:2px dashed {OR};border-radius:6px;padding:22px 26px"><span style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.14em;font-weight:600;color:#fff;background:#C93D1A;padding:6px 10px;border-radius:3px">EUROPE'S FIX</span><div style="margin-top:14px;font-size:23px;line-height:1.32">A supplementary protection certificate adds up to 5 years, capped at 15 years after approval.</div></div>
+  <div style="background:#fff;border-radius:6px;padding:24px 28px 26px;box-shadow:0 18px 40px rgba(26,22,19,0.15),0 2px 6px rgba(26,22,19,0.08);transform:rotate(2deg)">
+    <div style="font-family:'IBM Plex Mono';font-size:13px;letter-spacing:0.16em;color:{MUT2}">WHAT PHARMA ASKS FIRST</div>
+    <div style="margin-top:10px;font-family:'Newsreader',serif;font-style:italic;font-size:32px;line-height:1.12">"How many years of protection are left after launch?"</div>
+  </div>
+</div>
+</div>
 {footer('ILLUSTRATIVE · EPC ART. 63 · EU REG. 469/2009 · NOT LEGAL ADVICE',INK2,MUT2,'rgba(26,22,19,0.18)')}
-</div>'''
+</div>"""
+
 for name,html in [('trial',trial),('bio',bio),('patent',patent)]:
     open(f'{name}-render.html','w').write(head+html+'\n</body></html>')
     open(f'{name}.card.html','w').write(html)
