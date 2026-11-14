@@ -34,7 +34,7 @@ def icon(kind):
 def note(label,count,color,kind,bold=False):
     return f'''<div style="display:grid;grid-template-columns:60px 70px minmax(0,1fr);align-items:center;gap:6px">{icon(kind)}<span style="font-family:'Newsreader',serif;font-size:48px;line-height:1;color:{color}">{count}</span><span style="font-size:22px;line-height:1.25;font-weight:{600 if bold else 500};color:{color}">{label}</span></div>'''
 gridsvg=f'<svg width="630" height="452" viewBox="0 -2 630 452" aria-hidden="true">{cells}</svg>'
-legend=(note('stop after Phase 1',48,MUT,'p1')+note('stop in Phase 2, the biggest loss',37,AZD,'p2',True)+note('stop in Phase 3',6,INK,'p3')+note('stopped at filing',1,INK,'fi')+note('approved',8,AZ,'ap',True))
+legend=(note('stop after Phase 1',48,MUT,'p1')+note('stop in Phase 2, the biggest loss',37,AZD,'p2',True)+note('stop in Phase 3',6,INK,'p3')+note('stopped at filing',1,INK,'fi')+note('reach FDA approval',8,AZ,'ap',True))
 # mock press release with annotations
 pr_lines=''.join(f'<div style="height:10px;border-radius:5px;background:rgba(17,28,22,0.13);width:{w}%;margin-top:12px"></div>' for w in [100,94,98,70])
 pins=[("01","Primary endpoint, set before the trial?"),("02","Randomised and blinded?"),("03","Patient outcome, or a biomarker?"),("04","Whole trial, or a subgroup found later?"),("05","Better than today's treatment?")]
@@ -90,7 +90,7 @@ bio=f'''<div id="card" style="position:relative;width:1200px;height:1500px;backg
 {topbar('BY THE NUMBERS','FOR INVESTORS · THE SCIENCE SIDE','#1A66CC',INK,'rgba(17,28,22,0.2)')}
 <div style="display:flex;flex-direction:column;justify-content:space-between;height:1170px;padding-top:44px">
 <div style="font-family:'Newsreader',serif;font-size:80px;line-height:1.0;letter-spacing:-0.02em">Pick the right patients.<br><span style="font-style:italic;color:{AZ}">Double the odds.</span></div>
-<div style="margin-top:22px;font-size:26px;line-height:1.4;color:#38453E;max-width:930px">Drug programmes that used a biomarker to choose patients reached approval twice as often.</div>
+<div style="margin-top:22px;font-size:26px;line-height:1.4;color:#38453E;max-width:930px">Drug programmes that used a biomarker to choose patients reached FDA approval twice as often.</div>
 <div style="position:relative;margin-top:50px;display:grid;grid-template-columns:380px 1fr;gap:40px;align-items:center">
   <div><div style="font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{MUT};margin-bottom:10px">EVERYONE WITH THE DISEASE</div>{crowdsvg}</div>
   <div style="position:relative;height:270px">
@@ -100,7 +100,7 @@ bio=f'''<div id="card" style="position:relative;width:1200px;height:1500px;backg
     <div style="position:absolute;left:300px;top:186px;font-family:'IBM Plex Mono';font-size:15px;letter-spacing:0.12em;color:{AZD}">ONLY PATIENTS WITH<br>THE MARKER ENROL</div>
   </div>
 </div>
-<div style="position:relative;margin-top:44px;padding-top:20px;border-top:1px solid rgba(17,28,22,0.18);font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.14em;color:{MUT}">CHANCE OF APPROVAL FROM PHASE 1</div>
+<div style="position:relative;margin-top:44px;padding-top:20px;border-top:1px solid rgba(17,28,22,0.18);font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.14em;color:{MUT}">CHANCE OF FDA APPROVAL FROM PHASE 1</div>
 <div style="position:relative;margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:40px;justify-items:center">
   <div>{gauge(7.9,'ALL DRUGS',INK,False)}</div>
   <div>{gauge(15.9,'WITH A SELECTION BIOMARKER',AZ,True)}</div>
