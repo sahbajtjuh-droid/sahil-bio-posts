@@ -137,7 +137,7 @@ def callout(top,left,title,body,color,w=300):
     return f'''<div style="position:absolute;top:{top}px;left:{left}px;width:{w}px"><div style="height:3px;width:44px;background:{color};margin-bottom:12px"></div><div style="font-family:'IBM Plex Mono';font-size:16px;letter-spacing:0.12em;font-weight:600;color:{color}">{title}</div><div style="margin-top:6px;font-size:22px;line-height:1.3;color:#3a3630">{body}</div></div>'''
 patent=f'''<div id="card" style="position:relative;width:1200px;height:1500px;background:{WARM};color:{INK2};overflow:hidden;padding:96px 104px 0">{NOISE}
 {topbar('THE TAKE','FOR SCIENTISTS · THE BUSINESS SIDE','#C93D1A',INK2,'rgba(26,22,19,0.2)')}
-<div style="margin-top:44px;font-family:'Newsreader',serif;font-size:66px;line-height:1.02;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">Your first sale comes a decade later.</span></div>
+<div style="margin-top:44px;font-family:'Newsreader',serif;font-size:60px;line-height:1.04;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">Your first sale comes a decade later.</span></div>
 <div style="position:relative;margin-top:30px;height:700px">
   <div style="position:absolute;left:-30px;top:10px">{dial}</div>
   {callout(30,700,'YEAR 0 · YOU FILE','The clock starts. Lab work, trials and approval all run on it.',INK2)}
