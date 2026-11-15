@@ -125,9 +125,9 @@ for y in range(0,26):
 lab=''
 for y in [5,10,15,20]:
     x,yy=P(y,R+98); lab+=f'<text x="{x:.1f}" y="{yy+7:.1f}" font-family="IBM Plex Mono" font-size="20" font-weight="600" fill="{INK2}" text-anchor="middle">{y}</text>'
-fx1,fy1=P(10.5,R-34); fx2,fy2=P(10.5,R+34)
+fx1,fy1=P(14,R-34); fx2,fy2=P(14,R+34)
 sx,sy=P(22.5,R)
-apx,apy=P(10.5,R-78)
+apx,apy=P(14,R-78)
 def btn(yr):
     x,y=P(yr,R+70); a=math.degrees(ang(yr))+90
     return f'<rect x="{x-16:.1f}" y="{y-14:.1f}" width="32" height="28" rx="5" fill="{INK2}" transform="rotate({a:.1f} {x:.1f} {y:.1f})"/>'
@@ -138,15 +138,15 @@ dial=f"""<svg width="680" height="746" viewBox="-40 -40 740 812" aria-hidden="tr
 {btn(-2.6)}{btn(2.6)}
 <circle cx="{CX}" cy="{CY}" r="{R+62}" fill="none" stroke="{INK2}" stroke-width="7"/>
 <circle cx="{CX}" cy="{CY}" r="{R+58}" fill="#fff" opacity="0.55"/>
-<path d="{arc(0,10.5,R)}" fill="none" stroke="url(#hatch)" stroke-width="60"/>
-<path d="{arc(10.5,20,R)}" fill="none" stroke="{OR}" stroke-width="60"/>
+<path d="{arc(0,14,R)}" fill="none" stroke="url(#hatch)" stroke-width="60"/>
+<path d="{arc(14,20,R)}" fill="none" stroke="{OR}" stroke-width="60"/>
 <path d="{arc(20,25,R)}" fill="none" stroke="{OR}" stroke-width="60" opacity="0.25"/>
 {ticks}{lab}
 <line x1="{fx1:.1f}" y1="{fy1:.1f}" x2="{fx2:.1f}" y2="{fy2:.1f}" stroke="{INK2}" stroke-width="4"/>
 <text x="{sx:.1f}" y="{sy+7:.1f}" font-family="IBM Plex Mono" font-size="19" font-weight="600" fill="#B23A17" text-anchor="middle">SPC</text>
-<text x="{apx:.1f}" y="{apy+6:.1f}" font-family="IBM Plex Mono" font-size="15" font-weight="600" letter-spacing="1.5" fill="{INK2}" text-anchor="middle">APPROVAL</text>
+<text x="{apx:.1f}" y="{apy+6:.1f}" font-family="IBM Plex Mono" font-size="15" font-weight="600" letter-spacing="1.5" fill="{INK2}" text-anchor="middle">LAUNCH</text>
 <text x="{CX}" y="{CY-100}" font-family="IBM Plex Mono" font-size="16" letter-spacing="2" fill="{MUT2}" text-anchor="middle">ROUGHLY</text>
-<text x="{CX}" y="{CY+40}" font-family="Newsreader" font-size="170" fill="{OR}" text-anchor="middle">9</text>
+<text x="{CX}" y="{CY+40}" font-family="Newsreader" font-size="170" fill="{OR}" text-anchor="middle">6</text>
 <text x="{CX}" y="{CY+86}" font-family="IBM Plex Mono" font-size="18" letter-spacing="2.5" fill="{MUT2}" text-anchor="middle">YEARS LEFT TO SELL</text>
 </svg>"""
 def callout(title,body,color):
@@ -154,12 +154,12 @@ def callout(title,body,color):
             '<div style="font-family:\'IBM Plex Mono\';font-size:16px;letter-spacing:0.12em;font-weight:600;color:'+color+'">'+title+'</div>'
             '<div style="margin-top:6px;font-size:22px;line-height:1.32;color:#3a3630">'+body+'</div></div>')
 c1=callout('YEAR 0 · YOU FILE','The clock starts. Lab work, trials and approval all run on it.',INK2)
-c2=callout('ABOUT 10 YEARS · NO SALES','First human trial to approval took 10.5 years on average, 2011 to 2020.',INK2)
-c3=callout('YEAR 20 · PATENT ENDS','Whatever is left after approval is your selling window.',ORD)
+c2=callout('MEDIAN 14 YEARS · NO SALES','Drugs launched in 2024 reached the market a median 14 years after first patent filing.',INK2)
+c3=callout('YEAR 20 · PATENT ENDS','About 6 protected selling years are left. An SPC adds up to 5.',ORD)
 patent=f"""<div id="card" style="position:relative;width:1200px;height:1500px;background:{WARM};color:{INK2};overflow:hidden;padding:96px 104px 0">{NOISE}
 {topbar('THE TAKE','FOR SCIENTISTS · THE BUSINESS SIDE','#C93D1A',INK2,'rgba(26,22,19,0.2)')}
 <div style="display:flex;flex-direction:column;justify-content:space-between;height:1170px;padding-top:44px">
-<div style="font-family:'Newsreader',serif;font-size:60px;line-height:1.04;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">Your first sale comes a decade later.</span></div>
+<div style="font-family:'Newsreader',serif;font-size:60px;line-height:1.04;letter-spacing:-0.02em">Your patent clock starts the day you file.<br><span style="font-style:italic;color:{OR}">The median drug launches 14 years later.</span></div>
 <div style="position:relative;margin-top:22px;display:grid;grid-template-columns:640px minmax(0,1fr);gap:20px;align-items:center">
   <div style="margin-left:-36px">{dial}</div>
   <div style="display:flex;flex-direction:column;gap:46px">{c1}{c2}{c3}</div>
@@ -172,7 +172,7 @@ patent=f"""<div id="card" style="position:relative;width:1200px;height:1500px;ba
   </div>
 </div>
 </div>
-{footer('ILLUSTRATIVE · EPC ART. 63 · EU REG. 469/2009 · NOT LEGAL ADVICE',INK2,MUT2,'rgba(26,22,19,0.18)')}
+{footer('IQVIA 2025 · EPC ART. 63 · EU REG. 469/2009 · NOT LEGAL ADVICE',INK2,MUT2,'rgba(26,22,19,0.18)')}
 </div>"""
 
 for name,html in [('trial',trial),('bio',bio),('patent',patent)]:
