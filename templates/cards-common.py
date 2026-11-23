@@ -26,8 +26,8 @@ def mono(t,size=15,col=None,w=500,ls=0.14):
 def note(lbl,body,rot,mut,w=None):
     ww=f'width:{w}px;' if w else ''
     return f'''<div style="{ww}background:#fff;border-radius:6px;padding:22px 26px 24px;box-shadow:0 18px 40px rgba(17,28,22,0.14),0 2px 6px rgba(17,28,22,0.08);transform:rotate({rot}deg)"><div style="font-family:'IBM Plex Mono';font-size:14px;letter-spacing:0.16em;color:{mut}">{lbl}</div><div style="margin-top:10px;font-family:'Newsreader',serif;font-size:28px;line-height:1.16">{body}</div></div>'''
-BTAG=('THE BUSINESS SIDE','FOR SCIENTISTS · THE BUSINESS SIDE','#C93D1A')
-STAG=('THE SCIENCE SIDE','FOR INVESTORS · THE SCIENCE SIDE','#1A66CC')
+BTAG=('THE BUSINESS SIDE','THE BUSINESS SIDE','#C93D1A')
+STAG=('THE SCIENCE SIDE','THE SCIENCE SIDE','#1A66CC')
 def bcard(label,inner,src):
     return card(WARM,INK2,inner,footer(src,INK2,MUT2,'rgba(26,22,19,0.18)'),topbar(label,BTAG[1],BTAG[2],INK2,'rgba(26,22,19,0.2)'))
 def scard(label,inner,src):
